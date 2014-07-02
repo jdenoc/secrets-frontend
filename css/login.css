@@ -1,0 +1,23 @@
+html, body { margin: 0; padding: 0; }
+.hide { display: none;}
+.show { display: block;}
+#signin-button,
+#profile{
+    text-align: center;
+    margin: 40px auto;
+}
+#signin-button h4{ margin-bottom: 25px; }
+#wrapper h1{
+    font-family: 'Niconne', cursive;
+    font-size: 60px;
+    margin: 100px auto 0;
+    text-align: center;
+}
+#profile h1{
+    margin-bottom: 50px;
+    font-family: 'Niconne', cursive;
+    font-size: 60px;
+}
+a{
+    font-size: 12px;
+}

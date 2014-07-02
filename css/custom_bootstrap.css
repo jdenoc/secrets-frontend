@@ -1,0 +1,142 @@
+body{
+    background-color: #E5E3CE;
+}
+.navbar-inverse{
+    background-color: #4B0D18;
+}
+.navbar-inverse .navbar-brand:hover {
+    color: #DDD;
+}
+.nav>li>a:hover{
+    color: #4B4B4B;
+}
+.nav-sidebar li h4{
+    margin-left: 15px;
+}
+#user_menu{
+    padding: 0 !important;
+    margin: 0 10px;
+}
+#user_menu img{
+    border-radius: 25px;
+}
+.form-control{
+    display: inline-block;
+}
+
+.modal-body{
+    margin: auto;
+    text-align: center;
+}
+.modal-body label{
+    display: block;
+}
+
+.tooltip-inner{
+    max-width: inherit;
+}
+#secrets_table th:first-child,
+#secrets_table td:first-child{
+    width: 40px;
+}
+#secrets_table .secret_name{
+    font-style: italic;
+}
+
+/* Add Secret */
+#add-url{
+    width: 250px;
+    padding: 0 5px;
+    margin-left: 70px;
+}
+#add-username{
+    width: 250px;
+    padding: 0 5px;
+    margin-left: 28px;
+}
+#add-password{
+    width: 250px;
+    padding: 0 5px;
+    margin-left: 30px;
+}
+#add-modal .modal-body label:nth-child(4) span {
+    vertical-align: top;
+}
+#add-notes{
+    width: 250px;
+    padding: 0 5px;
+    margin-left: 57px;
+    height: 75px;
+}
+/* END - Add Secret */
+
+/* Display Secret */
+.display_secret label{
+    display: block;
+    vertical-align: top;
+    width: 475px;
+}
+.display_secret textarea {
+    width: 275px;
+    height: 75px;
+    margin-left: 49px;
+}
+.display_secret input{
+    width: 275px;
+}
+.display_secret label:first-child input{
+    margin-left: 19px;
+}
+.display_secret label:nth-child(2) input{
+    margin-left: 22px;
+}
+.display_secret label:nth-child(3) input{
+    margin-left: 62px;
+}
+.display_secret label:nth-child(4){
+    height: 85px;
+}
+.display_secret .btn{
+    top: -1px;
+}
+.display_secret label:nth-child(4) .btn{
+    top: -57px;
+}
+.display_secret .glyphicon-floppy-saved{
+    color: #000;
+    display: none;
+}
+.display_secret #btn_zone{
+    float: right;
+    position: relative;
+    top: -205px;
+    right: 30px;
+}
+/* END - Display Secret */
+
+#next{
+    margin: 0 20px 10px 0;
+    float: right;
+}
+#next:before{
+    content: "NEXT";
+    padding: 0 5px;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+}
+#prev{
+    margin: 0 0 10px 20px;
+    float: left;
+}
+#next span,
+#prev span{
+    font-size: 11px;
+}
+#prev:after{
+    content: "PREV";
+    padding: 0 5px;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+}
