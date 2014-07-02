@@ -4,7 +4,7 @@
  * Date: 2014-05-25
  */
 
-require_once(__DIR__ . '/Connection.php');
+require_once(__DIR__ . '/../Lib/PDO_Connection.php');
 $db = new Connection('jdenocco_secrets');
 $secrets = $db->getAllRows("SELECT id, `name` FROM secrets WHERE user_id=:user", array('user'=>$_REQUEST['user']));
 foreach($secrets as $row){

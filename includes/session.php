@@ -4,7 +4,7 @@
  * Date: 2014-03-05
  */
 
-require_once(__DIR__ . '/Connection.php');
+require_once(__DIR__ . '/../Lib/PDO_Connection.php');
 $db = new Connection('jdenocco_secrets');
 $user = $db->getValue("SELECT id FROM users WHERE email=:email", array('email'=>$_REQUEST['email']));
 if(empty($user)){

@@ -10,7 +10,7 @@ if(empty($_SESSION['email'])){
     header('Location: logout.php');
     exit;
 }
-require_once(__DIR__ . '/includes/Connection.php');
+require_once(__DIR__ . '/Lib/PDO_Connection.php');
 $db = new Connection('jdenocco_secrets');
 ?>
 <!DOCTYPE html>

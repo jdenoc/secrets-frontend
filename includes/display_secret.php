@@ -6,7 +6,7 @@
  * TODO  - build out encryption/decryption code 
  */
 
-require_once(__DIR__ . '/Connection.php');
+require_once(__DIR__ . '/../Lib/PDO_Connection.php');
 $db = new Connection('jdenocco_secrets');
 $secret = $db->getRow("SELECT * FROM secrets WHERE user_id=:user AND id=:sid", array('user'=>$_REQUEST['user'], 'sid'=>$_REQUEST['secret_id']));
 echo "<tr>\r\n";

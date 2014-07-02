@@ -4,7 +4,7 @@
  * Date: 2014-06-30
  */
 
-require_once(__DIR__ . '/Cypher.php');
+require_once(__DIR__ . '/../Lib/Cypher.php');
 
 $user = 1;
 $password = '123456789*';
