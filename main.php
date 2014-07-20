@@ -10,8 +10,8 @@ if(empty($_SESSION['email'])){
     header('Location: logout.php');
     exit;
 }
-require_once(__DIR__ . '/Lib/PDO_Connection.php');
-$db = new Connection('jdenocco_secrets');
+require_once(__DIR__ . '/Lib/php/PDO_Connection.php');
+$db = new PDO_Connection('jdenocco_secrets', __DIR__.'/config/config.db.php');
 ?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -30,9 +30,13 @@ $db = new Connection('jdenocco_secrets');
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="Lib/js/misc.js"></script>
+    <script type="text/javascript" src="Lib/js/loading.js"></script>
+    <script type="text/javascript" src="Lib/js/paging.js"></script>
     <script type="text/javascript"><?php echo 'var user = "'.$_SESSION['user_id'].'";'; ?></script>
+    <script type="text/javascript" src="js/jquery.base64.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <link href="css/loading.css" rel="stylesheet" type="text/css" />
+    <link href="Lib/css/loading.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -94,15 +98,15 @@ $db = new Connection('jdenocco_secrets');
                 <h4 class="modal-title">New Secret</h4>
             </div>
             <div class="modal-body">
-                <label><span>URL:</span><input type="text" name="url" id="add-url" class="form-control"/></label>
+                <label><span>Name:</span><input type="text" name="name" id="add-name" class="form-control"/></label>
                 <label><span>Username:</span><input type="text" name="username" id="add-username" class="form-control"/></label>
-                <label><span>Password:</span><input type="text" name="password" id="add-password" class="form-control"/></label>
+                <label><span>Password:</span><input type="password" name="password" id="add-password" class="form-control"/></label>
+                <label><span>URL:</span><input type="text" name="url" id="add-url" class="form-control"/></label>
                 <label><span>Notes:</span><textarea name="notes" id="add-notes" class="form-control"></textarea></label>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="add-cancel">Cancel</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="add-save"><span class="glyphicon glyphicon-ok"></span> Save</button>
-                <input type="hidden" name="secret_data" id="secret_data"/>
             </div>
         </div>
     </div>

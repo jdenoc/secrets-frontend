@@ -4,13 +4,15 @@
  * Date: 2014-05-25
  */
 
-require_once(__DIR__ . '/../Lib/PDO_Connection.php');
-$db = new Connection('jdenocco_secrets');
+require_once(__DIR__ . '/../Lib/php/PDO_Connection.php');
+$db = new PDO_Connection('jdenocco_secrets', __DIR__.'/../config/config.db.php');
 $secrets = $db->getAllRows("SELECT id, `name` FROM secrets WHERE user_id=:user", array('user'=>$_REQUEST['user']));
+$display_secrets = '';
 foreach($secrets as $row){
-    echo "<tr id='secret_".$row['id']."' onclick='displaySecret(".$row['id'].");'>\r\n";
-    echo "  <td></td>\r\n";
-    echo '  <td class="secret_name">'.$row['name']."</td>\r\n";
-    echo "  <td></td>\r\n";
-    echo '</tr>';
+    $display_secrets .= "<tr id='secret_".$row['id']."' class='secret_row'>\r\n";
+    $display_secrets .= "  <td></td>\r\n";
+    $display_secrets .= '  <td class="secret_name">'.$row['name']."</td>\r\n";
+    $display_secrets .= "  <td></td>\r\n";
+    $display_secrets .= '</tr>';
 }
+echo base64_encode($display_secrets);

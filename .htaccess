@@ -1,0 +1,13 @@
+# Secure .htaccess file
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<FilesMatch .*config.*>
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# disable directory browsing
+Options All -Indexes

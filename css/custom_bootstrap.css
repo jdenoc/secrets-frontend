@@ -42,8 +42,19 @@ body{
 #secrets_table .secret_name{
     font-style: italic;
 }
+.alert-dismissable{
+    text-align: center;
+    font-weight: bold;
+    padding: 9px 35px 5px;
+    margin-bottom: 5px;
+}
 
 /* Add Secret */
+#add-name{
+    width: 250px;
+    padding: 0 5px;
+    margin-left: 60px;
+}
 #add-url{
     width: 250px;
     padding: 0 5px;
@@ -59,7 +70,7 @@ body{
     padding: 0 5px;
     margin-left: 30px;
 }
-#add-modal .modal-body label:nth-child(4) span {
+#add-modal .modal-body label:nth-child(5) span {
     vertical-align: top;
 }
 #add-notes{
@@ -104,6 +115,9 @@ body{
 }
 .display_secret .glyphicon-floppy-saved{
     color: #000;
+    display: none;
+}
+.display_secret .glyphicon-repeat{
     display: none;
 }
 .display_secret #btn_zone{
