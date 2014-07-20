@@ -247,7 +247,7 @@ function displayAlert(alertType, alertText){
 
 $(function(){
     loading.start();
-//    loading.setImage('img/loading.gif');      // TODO - create image before enabling
+//    loading.img = 'img/loading.gif';      // TODO - create image before enabling
     paging.nextObj = $('#next');
     paging.prevObj = $('#prev');
     secrets.displayAll();
