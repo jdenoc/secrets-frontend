@@ -34,7 +34,7 @@ $display_secret .= '          <textarea name="secret_notes" class="form-control"
 $display_secret .= '          <button type="button" title="edit" id="edit_username" class="btn btn-default glyphicon glyphicon-pencil" onclick="secretField.edit(4);"></button>';
 $display_secret .= '      </label>'."\r\n";
 $display_secret .= "      <div id='btn_zone'>\r\n";
-$display_secret .= '          <button type="button" class="btn btn-default glyphicon glyphicon glyphicon-repeat" onclick="secretField.revert();"></button>';  // TODO - make revert work changes
+$display_secret .= '          <button type="button" class="btn btn-default glyphicon glyphicon glyphicon-repeat" onclick="secretField.revert();"></button>';
 $display_secret .= '          <button type="button" class="btn btn-success glyphicon glyphicon-floppy-saved" onclick="secrets.save('.$secret['id'].');"></button>';
 $display_secret .= '          <button type="button" class="btn btn-danger glyphicon glyphicon-trash" onclick="secrets.del('.$secret['id'].');"></button>';
 $display_secret .= "      </div>\r\n";
