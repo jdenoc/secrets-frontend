@@ -32,7 +32,10 @@ var secretField = {
                 $('#show_password').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
                 loading.end();
             },
-            error:function(){}
+            error:function(){
+                notice.display('danger', 'WARNING: Issue occurred while trying to show password Secret');
+                loading.end();
+            }
         });
     },
     conceal: function(){
@@ -86,7 +89,7 @@ var secrets = {
                     secret_id: secret_id
                 },
                 beforeSend:function(){
-                    $('.alert').remove();
+                    notice.remove();
                     loading.start();
                     if($(".display_secret") != []){
                         $('.display_secret').parents('tr').remove();
@@ -100,7 +103,10 @@ var secrets = {
                     secretField.setOriginal();
                     loading.end();
                 },
-                error:function(){}
+                error:function(){
+                    notice.display('danger', 'WARNING: Issue occurred while trying to display Secret');
+                    loading.end();
+                }
             });
         }
     },
@@ -122,7 +128,10 @@ var secrets = {
             success: function(data){
                 paging.totalElements = parseInt(data);
             },
-            error:function(){}
+            error:function(){
+                notice.display('danger', 'WARNING: Issue occurred while trying to retrieve Secrets');
+                loading.end();
+            }
         });
 
         $.ajax({
@@ -139,7 +148,10 @@ var secrets = {
                 $('.secret_row').bind('click', secrets.displayHandler);
                 loading.end();
             },
-            error:function(){}
+            error:function(){
+                notice.display('danger', 'WARNING: Issue occurred while trying to retrieve Secrets');
+                loading.end();
+            }
         });
     },
     clearNew: function(){
@@ -154,12 +166,14 @@ var secrets = {
         loading.start();
         // TODO - validate everything is OK.
         var secretData = {};
+        var saveMsg = '';
         if(typeof secret_id == 'undefined'){
             secretData.name = $("#add-name").val();
             secretData.username = $("#add-username").val();
             secretData.password = $("#add-password").val();
             secretData.url = $("#add-url").val();
             secretData.notes = $("#add-notes").val();
+            saveMsg = "New Secret Saved";
         } else {
             // get existing secret details
             secretData.id = secret_id;
@@ -172,6 +186,7 @@ var secrets = {
             if(!text.prop('readonly')){
                 secretData[ text.attr('name').replace(secrets.idStart, '') ] = text.val();
             }
+            saveMsg = "Secret Updated";
         }
         secretData.user = user;
 
@@ -181,14 +196,22 @@ var secrets = {
             data: {
                 data: prepareDataTransfer(JSON.stringify(secretData), true)
             },
-            beforeSend:function(){},
+            beforeSend:function(){
+                notice.remove();
+            },
             success: function(data){
                 secrets.refreshAll();
                 if(parseInt(data)){
-                    displayAlert('success', 'Secret Saved');
+                    notice.display('success', saveMsg);
+                } else {
+                    notice.display('danger', 'WARNING: Issue occurred while trying to save Secret');
                 }
+                loading.end();
             },
-            error:function(){}
+            error:function(){
+                notice.display('danger', 'WARNING: Issue occurred while trying to save Secret');
+                loading.end();
+            }
         });
     },
     del: function(secret_id){
@@ -202,18 +225,24 @@ var secrets = {
                 },
                 beforeSend:function(){
                     loading.start();
-                    $('.display_secret').parents('tr').remove();
+                    notice.remove();
+                    secrets.hide();
                 },
                 success:function(data){
                     // successful request
                     $('#'+secrets.idStart+secret_id).remove();
-                    loading.end();
                     secrets.active = null;
                     if(parseInt(data)){
-                        displayAlert('success', 'Secret Deleted');
+                        notice.display('success', 'Secret Deleted');
+                    } else {
+                        notice.display('danger', 'WARNING: Issue occurred while trying to delete Secret');
                     }
+                    loading.end();
                 },
-                error:function(){}
+                error:function(){
+                    notice.display('danger', 'WARNING: Issue occurred while trying to delete Secret');
+                    loading.end();
+                }
             });
         }
     },
@@ -233,21 +262,26 @@ function prepareDataTransfer(data, send){
     }
 }
 
-function displayAlert(alertType, alertText){
-    var validAlertTypes = ['info', 'warning', 'success', 'danger'];
-    var alertToDisplay = '';
-    if($.inArray(alertType, validAlertTypes) > -1){
-        alertToDisplay += '<div class="alert alert-'+alertType+' alert-dismissable" role="alert">';
-        alertToDisplay += '     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>';
-        alertToDisplay += '     '+alertText;
-        alertToDisplay += '</div>';
+var notice = {
+    display: function(alertType, alertText){
+        var validAlertTypes = ['info', 'warning', 'success', 'danger'];
+        var alertToDisplay = '';
+        if($.inArray(alertType, validAlertTypes) > -1){
+            alertToDisplay += '<div class="alert alert-'+alertType+' alert-dismissable" role="alert">';
+            alertToDisplay += '     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>';
+            alertToDisplay += '     '+alertText;
+            alertToDisplay += '</div>';
+        }
+        $('.row').before(alertToDisplay);
+    },
+    remove: function(){
+        $('.alert').remove();
     }
-    $('.row').before(alertToDisplay);
-}
+};
 
 $(function(){
     loading.start();
-//    loading.img = 'img/loading.gif';      // TODO - create image before enabling
+    loading.img = 'imgs/loading.gif';
     paging.nextObj = $('#next');
     paging.prevObj = $('#prev');
     secrets.displayAll();
@@ -255,6 +289,7 @@ $(function(){
 
     $('#add-save').click(function(){
         secrets.save();
+        secrets.clearNew();
     });
     $('#add-cancel').click(secrets.clearNew);
     paging.nextObj.val( paging.current+1 ).click(function(){
@@ -265,5 +300,5 @@ $(function(){
         paging.prev();
         secrets.refreshAll();
     });
-    displayAlert('info', 'Welcome');
+    notice.display('info', 'Welcome');
 });
