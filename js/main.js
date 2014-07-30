@@ -17,10 +17,11 @@ var secretField = {
     reveal: function(){
         $.ajax({
             type: 'POST',
-            url: '../includes/get_password.php?x='+nocache(),
+            url: secrets.requestUri+'?x='+nocache(),
             data: {
-                u: user,
-                s: secrets.active
+                user: user,
+                secret_id: secrets.active,
+                type: 'password'
             },
             beforeSend:function(){
                 loading.start();
@@ -71,6 +72,7 @@ var secretField = {
 var secrets = {
     idStart: "secret_",
     active: null,
+    requestUri: '../includes/request_data.php',
     hide: function(){
         secrets.active = null;
         secretField.originalData = {};
@@ -83,10 +85,11 @@ var secrets = {
         } else {
             $.ajax({
                 type: 'POST',
-                url: '../includes/display_secret.php?x='+nocache(),
+                url: secrets.requestUri+'?x='+nocache(),
                 data: {
                     user: user,
-                    secret_id: secret_id
+                    secret_id: secret_id,
+                    type: 'get'
                 },
                 beforeSend:function(){
                     notice.remove();
@@ -120,9 +123,10 @@ var secrets = {
         paging.totalElements = -1;
         $.ajax({
             type: 'POST',
-            url: '../includes/get_secret_count.php?x='+nocache(),
+            url: secrets.requestUri+'?x='+nocache(),
             data: {
-                user: user
+                user: user,
+                type: 'count'
             },
             beforeSend:function(){},
             success: function(data){
@@ -136,10 +140,12 @@ var secrets = {
 
         $.ajax({
             type: 'POST',
-            url: '../includes/get_secret_names.php?x='+nocache(),
+            url: secrets.requestUri+'?x='+nocache(),
             data: {
-                limit : paging.current,
-                user: user
+                start : paging.current,
+                limit: paging.limit,
+                user: user,
+                type: 'list'
             },
             beforeSend:function(){},
             success:function(data){
@@ -188,13 +194,14 @@ var secrets = {
             }
             saveMsg = "Secret Updated";
         }
-        secretData.user = user;
 
         $.ajax({
             type: 'POST',
-            url: '../includes/save_secret.php?x='+nocache(),
+            url: secrets.requestUri+'?x='+nocache(),
             data: {
-                data: prepareDataTransfer(JSON.stringify(secretData), true)
+                user: user,
+                data: prepareDataTransfer(JSON.stringify(secretData), true),
+                type: 'save'
             },
             beforeSend:function(){
                 notice.remove();
@@ -218,10 +225,11 @@ var secrets = {
         if(confirm("Are you user sure you want to delete this secret?")){
             $.ajax({
                 type: 'POST',
-                url: '../includes/delete_secret.php?x='+nocache(),
+                url: secrets.requestUri+'?x='+nocache(),
                 data: {
                     user: user,
-                    secret_id: secret_id
+                    secret_id: secret_id,
+                    type: 'delete'
                 },
                 beforeSend:function(){
                     loading.start();
