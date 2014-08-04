@@ -1,11 +1,13 @@
-body{
-    background-color: #E5E3CE;
-}
 .navbar-inverse{
-    background-color: #4B0D18;
+    background-color: #e84b5d;
 }
-.navbar-inverse .navbar-brand:hover {
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav>li>a {
     color: #DDD;
+}
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-nav>li>a:hover{
+    color: #634353;
 }
 .nav>li>a:hover{
     color: #4B4B4B;
