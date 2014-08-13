@@ -35,6 +35,7 @@ class ProcessData {
     }
 
     private static function set_auth(){
+        // TODO - find a better way to obtain this value. Maybe from a DB.
         self::$auth = 'test';
     }
 
@@ -53,7 +54,7 @@ class ProcessData {
         return $data;
     }
 
-    public static function base_process($data){
+    private static function base_process($data){
         return json_decode(base64_decode($data), true);
     }
 
