@@ -32,7 +32,6 @@ if(empty($_SESSION['email'])){
     <script type="text/javascript" src="Lib/js/loading.js"></script>
     <script type="text/javascript" src="Lib/js/paging.js"></script>
     <script type="text/javascript"><?php echo 'var user = "'.$_SESSION['user_id'].'";'; ?></script>
-    <script type="text/javascript" src="js/jquery.base64.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <link href="Lib/css/loading.css" rel="stylesheet" type="text/css" />
 </head>

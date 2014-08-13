@@ -26,9 +26,8 @@ var secretField = {
             beforeSend:function(){
                 loading.start();
             },
-            success:function(data){
+            success:function(displayPassword){
                 // successful request
-                var displayPassword = $.base64.decode(data);
                 $('.display_secret label:nth-child(2) input').attr('type', 'text').val(displayPassword);
                 $('#show_password').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
                 loading.end();
@@ -98,9 +97,8 @@ var secrets = {
                         $('.display_secret').parents('tr').remove();
                     }
                 },
-                success:function(data){
+                success:function(displayData){
                     // successful request
-                    var displayData = $.base64.decode(data);
                     secrets.active = secret_id;
                     $('#'+secrets.idStart+secret_id).after(displayData);
                     secretField.setOriginal();
@@ -148,8 +146,7 @@ var secrets = {
                 type: 'list'
             },
             beforeSend:function(){},
-            success:function(data){
-                var displayData = $.base64.decode(data);
+            success:function(displayData){
                 $('table').append(displayData);
                 $('.secret_row').bind('click', secrets.displayHandler);
                 loading.end();
@@ -200,7 +197,7 @@ var secrets = {
             url: secrets.requestUri+'?x='+nocache(),
             data: {
                 user: user,
-                data: prepareDataTransfer(JSON.stringify(secretData), true),
+                data: JSON.stringify(secretData),
                 type: 'save'
             },
             beforeSend:function(){
@@ -261,14 +258,6 @@ var secrets = {
         secrets.displayAll();
     }
 };
-
-function prepareDataTransfer(data, send){
-    if(send){
-        return $.base64.encode(data);
-    } else {
-        return $.base64.decode(data);
-    }
-}
 
 var notice = {
     display: function(alertType, alertText){
