@@ -4,107 +4,85 @@
  * Date: 2014-07-27
  */
 
+require_once(__DIR__.'/process_data.php');
+
 if(empty($_REQUEST['user'])){
     exit;
 } else {
     $user = $_REQUEST['user'];
+    ProcessData::set_user_id($user);
 }
 
 switch($_REQUEST['type']){
     case 'count':
         $uri = 'count/id/'.$user;
         $post = false;
-        $decrypt = false;
         $post_data = array();
+        $callback = 'do_nothing';
         break;
 
     case 'delete':
-        $uri = 'delete/id/'.$_POST['secret_id'].'/user/'.$user;
+        $uri = 'delete/id/'.ProcessData::clean_input('secret_id').'/user/'.$user;
         $post = false;
-        $decrypt = false;
         $post_data = array();
+        $callback = 'do_nothing';
         break;
 
     case 'list':
         $limit = empty($_POST['limit']) ? 50 : $_POST['limit'];
-        $start = intval($_POST['start']);
+        $start = intval(ProcessData::clean_input('start'));
         $uri = 'list/id/'.$user.'/start/'.$start.'/limit/'.$limit;
         $post = false;
-        $decrypt = false;
         $post_data = array();
+        $callback = 'list_secrets';
         break;
 
     case 'get':
-        $id = intval($_REQUEST['secret_id']);
+        $id = intval(ProcessData::clean_input('secret_id'));
         $uri = 'display/id/'.$id.'/user/'.$user;
         $post = false;
-        $decrypt = false;
         $post_data = array();
+        $callback = 'display';
         break;
 
     case 'save':
         $uri = 'save';
         $post = true;
-        $decrypt = false;
-        $secret_data = json_decode(base64_decode($_POST['data']), true);
+        $secret_data = json_decode(ProcessData::clean_input('data'), true);
         if(!empty($secret_data['password'])){
-            $encrypt_url = 'http'.(empty($_SERVER['HTTPS']) ? '' : 's').'://'.$_SERVER['SERVER_NAME'].'/includes/crypt.php';
             $secret_data['password_length'] = strlen($secret_data['password']);
-            $secret_data['encrypted_password'] = make_call($encrypt_url.'?u='.$user.'&t=1&d='.urlencode($secret_data['password'].$_GET['x']));
+            $secret_data['encrypted_password'] = ProcessData::encrypt($user, $secret_data['password'].$_GET['x']);
             unset($secret_data['password'], $encrypt_url);
         }
         $post_data = array(
             'user'=>$user,
             'data'=>base64_encode(json_encode($secret_data))
         );
+        $callback = 'do_nothing';
         break;
 
     case 'password':
-        $id = intval($_REQUEST['secret_id']);
+        $id = intval(ProcessData::clean_input('secret_id'));
         $uri = 'password/id/'.$id.'/user/'.$user;
         $post = false;
-        $decrypt = true;
         $post_data = array();
+        $callback = 'get_password';
         break;
 
     default:
         $uri = '';
+        $callback = 'do_nothing';
 }
 
 $api_url = 'http://services.local/index.php/api/secrets/';
-$json_response = make_call($api_url.$uri, $post, $post_data);
-$response_array = json_decode($json_response, true);
-
-if(empty($response_array['error'])){
-    if($decrypt){
-        $decrypt_url = 'http'.(empty($_SERVER['HTTPS']) ? '' : 's').'://'.$_SERVER['SERVER_NAME'].'/includes/crypt.php';
-        $decrypted = make_call($decrypt_url.'?u='.$user.'&t=0&d='.urlencode($response_array['result']['encrypted_password']));
-        echo base64_encode(substr($decrypted, 0, $response_array['result']['password_length']));
-    } else {
-        echo $response_array['result'];
-    }
+$json_response = ProcessData::make_call($api_url.$uri, $post, $post_data);
+if(!$response_array = json_decode($json_response, true)){
+    error_log(ProcessData::$error_title.$json_response);
 } else {
-    error_log($response_array['error']);
-}
-
-function make_call($url, $post=false, $post_data=array()){
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Api:test',
-    ));
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-    curl_setopt($ch, CURLOPT_POST, $post);
-    if($post){
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    if(empty($response_array['error'])){
+        $response = call_user_func(array('ProcessData', $callback), $response_array['result']);
+        echo $response;
+    } else {
+        error_log(ProcessData::$error_title.$response_array['error']);
     }
-    $result = curl_exec($ch);
-
-    if (curl_errno($ch)) {
-        error_log("services connection issue".curl_error($ch));
-    }
-    curl_close($ch);
-    return $result;
 }
