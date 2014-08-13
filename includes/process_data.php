@@ -143,4 +143,16 @@ class ProcessData {
     public static function get_user_id(){
         return self::$user_id;
     }
+
+    private static function get_env(){
+        return getenv('environment');
+    }
+
+    public static function get_url(){
+        if(self::get_env() == 'live'){
+            return 'https://services.jdenoc.com/api/secrets/';
+        } else {
+            return 'http://services.local/api/secrets/';
+        }
+    }
 } 
