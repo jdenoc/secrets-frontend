@@ -74,7 +74,7 @@ switch($_REQUEST['type']){
         $callback = 'do_nothing';
 }
 
-$api_url = 'http://services.local/index.php/api/secrets/';
+$api_url = 'http://services.local/api/secrets/';
 $json_response = ProcessData::make_call($api_url.$uri, $post, $post_data);
 if(!$response_array = json_decode($json_response, true)){
     error_log(ProcessData::$error_title.$json_response);
